@@ -62,9 +62,42 @@ order by 1, 2
 -- Trail
 -- GLOBAL NUMBERS
 
-SELECT location, total_cases, CONCAT(ROUND(total_cases/1000000, 2), ' Million') as Cases_more_1M
-From PortfolioProject..CovidDeaths
-WHERE location NOT LIKE '%world%'
-and total_cases >= 1000000
--- Group by date 
-order by total_cases desc
+--SELECT location, total_cases, CONCAT(ROUND(total_cases/1000000, 2), ' Million') as Cases_more_1M
+--From PortfolioProject..CovidDeaths
+--WHERE location NOT LIKE '%world%'
+--and total_cases >= 1000000
+---- Group by date 
+--order by total_cases desc
+
+
+-- Looking at total population vs vaccinations
+
+Select dea.continent, dea.location, dea.date, dea.population, dea.new_vaccinations 
+, SUM(CONVERT(int, dea.new_vaccinations)) OVER(Partition by dea.Location Order by dea.location, 
+dea.Date) as RollingPeopleVaccinated
+-- , (RollingPeopleVaccinated/population)*100
+
+From PortfolioProject..CovidDeaths dea
+Join PortfolioProject..CovidVaccinations vac
+	On dea.location = vac.location
+	and dea.date = vac.date
+Where dea.continent is not NULL
+order by 1, 2, 3
+
+With PopvsVac (Continent, Location, Date, Population, New_vaccinations, RollingPeopleVaccinated)
+as
+(
+Select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations 
+, SUM(CONVERT(int, vac.new_vaccinations)) OVER(Partition by dea.Location Order by dea.location, dea.Date) as RollingPeopleVaccinated
+-- , (RollingPeopleVaccinated/population)*100
+
+From PortfolioProject..CovidDeaths dea
+Join PortfolioProject..CovidVaccinations vac
+	On dea.location = vac.location
+	and dea.date = vac.date
+Where dea.continent is not NULL
+-- order by 2, 3
+)
+
+SELECT *
+From PopvsVac
