@@ -5,3 +5,6 @@ I demonstrated my proficiency in using SQL to analyze data sets and extract insi
 
 During the course of the video, I shared a step-by-step process for calculating the percentage of vaccinated people in a specific country using a rolling people vaccine. I emphasized the importance of creating a column in a prior query and illustrated why a particular calculation would not yield accurate results.
 
+To store data for future use, I walked viewers through the process of creating a view. Additionally, I demonstrated how to leverage Tableau Public to connect to the view and execute queries on the data.
+
+Overall, I showcased my expertise in Excel, SQL and Tableau and provided valuable insights into how to leverage this powerful tool to gain valuable insights from complex data sets.
